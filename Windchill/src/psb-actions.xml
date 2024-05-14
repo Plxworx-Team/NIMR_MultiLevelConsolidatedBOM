@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE listofactions SYSTEM "actions.dtd">
+<listofactions>
+
+<!--custom report-->
+	<objecttype name="psb" resourceBundle="ext.customreport.PsbCustomActionsRB">
+      <action name="psbCustomReportGWT01" ajax="component"  type="psb">
+<command class="com.ptc.cat.ui.client.action.LaunchURLAction" 
+		 method="execute" url="netmarkets/jsp/ext/customjsp/report_Wizard.jsp" windowType="popup"/>
+<supportedTypes>
+<type value="wt.part.WTPart"/>
+<type value="wt.part.WTPartUsageLink"/>
+<type value="wt.part.PartUsesOccurrence"/>
+<type value="wt.part.RTPartPathOccurrence"/>
+</supportedTypes>
+
+</action>
+	<action name="report_WizardStep"  type="psb" required="true">
+			<command url="netmarkets/jsp/ext/customjsp/report_WizardStep.jsp" windowType="wizard_step" />
+		</action>
+   <action name="ExportBOM">
+              <command method="" class="" windowType="page" url="javascript:onSubmit()" onClick="this.disabled=true"/>
+         <label><u class='mnemonic'></u>Generate</label>
+            <moreurlinfo>width=1000,height=650</moreurlinfo>
+        </action>	
+	</objecttype>
+</listofactions>	
+	  

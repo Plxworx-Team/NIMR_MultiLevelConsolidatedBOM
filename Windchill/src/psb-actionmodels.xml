@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE actionmodels SYSTEM "actionmodels.dtd">
+<actionmodels>
+
+ <model name="psbRelatedPartsTreeToolBar">
+      <action name="editingGroupGWT" type="psb" />
+      <action name="insertExistingPartStructureGWT" type="psb" />
+      <action name="insertExistingPartStructureJCA" type="psb" />
+      <action name="removeGWT" type="psb" />
+      <action name="replaceWithExistingPartStructureGWT" type="psb" />
+      <action name="insertNewPartStructureSplitGWT" type="psb" />
+      <action name="insertNewPartStructureGWT" type="psb" />
+      <action name="insertMultiNewPartStructureGWT" type="psb" />
+      <action name="editSplitGWT" type="psb" />
+      <action name="editGWT" type="psb" />
+      <action name="editUsageLinkTreeGWT" type="psb" />
+      <action name="editCommonAttrsGWT" type="psb" />
+      <action name="separator" type="separator" />
+      <action name="renameGWT" type="psb" />
+      <action name="cadxRenameGWT" type="cadx" />
+      <action name="moveGWT" type="cat" />
+
+      <action name="createOccurrencesGWT" type="psb" />
+      <action name="replaceWithNewPartStructureGWT" type="psb" />
+
+      <action name="checkInOutGroupGWT" type="psb" />
+      <action name="checkoutGWT" type="psb" />
+      <action name="newRevisionGWT" type="cat" />
+      <action name="partCheckinSplitGWT" type="psb" />
+      <action name="partCheckinGWT" type="psb" />
+      <action name="undocheckoutGWT" type="psb" />
+      <action name="findCheckoutItemsGWT" type="psb" />
+
+      <action name="clipboardGroupGWT" type="psb" />
+      <action name="pasteFromClipboardToTreeWithLargeIconGWT" type="psb" />
+      <action name="copyToWindchillWithLargeIconGWT" type="cat" />
+      <action name="pasteFromClipboardToTreeGWT" type="psb" />
+      <action name="pasteSelectToTreeGWT" type="psb" />
+
+      <action name="viewingGroupGWT" type="psb" />
+      <action name="showDefaultRelatedObjectsGWT" type="psb" />
+
+      <action name="configurableTableViewGWT" type="cat" />
+      <action name="configurableTableViewListGWT" type="cat" />
+      <action name="separator" type="separator" />
+      <action name="saveStructureViewGWT" type="cat" />
+      <action name="configurableTableViewManagerGWT" type="cat" />
+      <action name="separator" type="cat" />
+      <action name="sourcingContextGWT" type="psb" />
+      <action name="sourcingContextListGWT" type="psb" />
+      <action name="separator" type="cat" />
+      <action name="findSourcingContextGWT" type="psb" />
+
+      <action name="hideAllRelatedObjectsGWT" type="psb" />
+
+      <action name="displayGWT" type="cat" />
+      <action name="displayOccurrencesGWT" type="psb" />
+      <action name="separator" type="separator" />
+      <action name="selectAllGWT" type="cat" />
+      <action name="separator" type="separator" />
+      <action name="expandAllLevelsFromRootGWT" type="cat" />
+      <action name="psbExpandSubmenuGWT" type="psb" />
+      <action name="expandOneLevelGWT" type="cat" />
+      <action name="expandTwoLevelsGWT" type="cat" />
+      <action name="expandThreeLevelsGWT" type="cat" />
+      <action name="expandFourLevelsGWT" type="cat" />
+      <action name="expandFiveLevelsGWT" type="cat" />
+      <action name="separator" type="separator" />
+      <action name="expandAllSelectedLevelsGWT" type="cat" />
+      <action name="expandNLevelsGWT" type="cat" />
+      <action name="collapseAllLevelsGWT" type="cat" />
+      <action name="psbEndExpandSubmenuGWT" type="psb" />
+      <action name="separator" type="separator" />
+      <action name="viewLayout2Panel" type="cat" />
+      <action name="viewLayout3Panel" type="cat" />
+      <action name="separator" type="separator" />
+      <action name="refreshGWT" type="cat" />
+
+      <action name="newAddToGroupGWT" type="psb" />
+      <action name="newActionsGWT" type="psb" />
+      <action name="saveAsGWT" type="psb" />
+      <action name="separator" type="separator" />
+      <action name="newPromotionRequestTreeGWT" type="psb" />
+      <action name="newPartConfigGWT" type="psb" />
+      <action name="newRepresentationTreeGWT" type="psb" />
+      <action name="newPARGWT" type="psb"/>
+      <action name="addToActionsGWT" type="psb" />
+      <action name="addToBaselineGWT" type="cat" />
+      <action name="addToPackageGWT" type="cat" />
+      <action name="SBAddToPrj" type="cat" />
+
+      <action name="filterGroupGWT" type="ec" />
+      <action name="editFilterWithLargeIconGWT" type="ec" />
+      <action name="filterPropertiesGWT" type="ec" />
+      <action name="savedFiltersGWT" type="ec" />
+
+      <action name="toolsGroupGWT" type="psb" />
+      <action name="compareActionsGWT" type="psb" />
+      <action name="launchStructureCompareGWT" type="psb" />
+      <action name="launchCompareToCADGWT" type="dsv" />
+      <action name="openActionsGWT" type="psb" />
+      <action name="openInProductViewGWT" type="psb" />
+      <action name="openInPSEGWT" type="psb" />
+      <action name="openInMPSEGWT" type="psb" />
+      <action name="openInSPSEGWT" type="psb" />
+      <action name="openInMAPSBGWT" type="baseclient" />
+      <action name="openInSAPSBGWT" type="psb" />
+
+      <action name="serviceGroupGWT" type="partseditor" />
+      <action name="generateActionsGWT" type="partseditor" />
+      <action name="generatePLSelected" type="partseditor" />
+      <action name="generatePLAll" type="partseditor" />
+
+      <action name="psbReportsGroupGWT" type="psb" />
+      <action name="psbReportsGWT" type="psb" />
+	 <action name="psbCustomReportGWT01" type="psb" /> <!-- custom report-->
+	  <action name="separator" type="separator" />
+      <action name="psbReportMultiLevelCompListGWT" type="psb" />
+      <action name="separator" type="separator" />
+      <action name="psbReportSingleLevelConsolBOMGWT" type="psb" />
+      <action name="psbReportSingleLevelBOMGWT" type="psb" />
+      <action name="psbReportSingleLevelBOMWithNotesGWT" type="psb" />
+      <action name="separator" type="separator" />
+      <action name="psbReportMultiLevelBOMGWT" type="psb" />
+      <action name="psbReportMultiLevelBOMWithReplacementsGWT" type="psb" />
+      <action name="psbReportMultiLevelBOMWithAMLAVLGWT" type="psb" />
+      <action name="psbReportMultiLevelBOMWithAMLGWT" type="psb" />
+      <action name="separator" type="separator" />
+      <action name="singleSourceOEMPartsGWT" type="psb" />
+      <action name="uniqueManufacturerPartsGWT" type="psb" />
+      <action name="separator" type="separator" />
+      <action name="changeBaselineReportGWT" type="change" />
+      <action name="exportActionsGWT" type="cat"/>
+      <action name="exportCsvGWT" type="cat" />
+      <action name="exportHtmlGWT" type="cat" />
+      <action name="exportPdfGWT" type="cat" />
+      <action name="exportTextGWT" type="cat" />
+      <action name="exportXlsGWT" type="cat" />
+      <action name="exportXlsxGWT" type="cat" />
+      <action name="exportXlsReportGWT" type="cat" />
+      <action name="exportXmlGWT" type="cat" />
+	  <action name="spreadsheetExportGWT" type="ixb" />
+   </model>
+   
+   <!-- psb Details page Button list -->
+<model name="BOMReportWizardButtons">
+<action name="ExportBOM" type="psb" />
+<action name="cancelButton" type="object" />
+</model>
+  </actionmodels> 
