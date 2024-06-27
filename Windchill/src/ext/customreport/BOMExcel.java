@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -67,15 +68,16 @@ public class BOMExcel extends DefaultObjectFormProcessor {
 		tmpLocation = tempStr;
 		homeLocation = homefolder;
 	}
+	
 
 	@Override
 	public FormResult doOperation(NmCommandBean nmCommandBean, List<ObjectBean> list) throws WTException {
-		System.out.println("OK clicked");
+	
 		WTPart part = (WTPart) nmCommandBean.getPageOid().getRefObject();
 		System.out.println("@@@ parent part:-" + part.getNumber());
 
 		try {
-			findPrtNo(part);
+			generateBOMExcelFile(part);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -85,12 +87,19 @@ public class BOMExcel extends DefaultObjectFormProcessor {
 		return formResult;
 	}
 
-	public static File findPrtNo(WTPart foundPrt) throws WTException, IOException {
+/****
+ * 	
+ * @param part
+ * @return
+ * @throws WTException
+ * @throws IOException
+ */
+	public static File generateBOMExcelFile(WTPart part) throws WTException, IOException {
 
-		System.out.println("Part Number:" + foundPrt.getNumber());
-		System.out.println("Part Name: " + foundPrt.getName());
-		System.out.println("Version Details:" + foundPrt.getVersionIdentifier());
-		System.out.println("Lastest Iteration Details:" + foundPrt.isLatestIteration());
+		System.out.println("Part Number:" + part.getNumber());
+		System.out.println("Part Name: " + part.getName());
+		System.out.println("Version Details:" + part.getVersionIdentifier());
+		System.out.println("Lastest Iteration Details:" + part.isLatestIteration());
 
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		XSSFSheet spreadsheet = workbook.createSheet("BOM SHEET");
@@ -113,8 +122,8 @@ public class BOMExcel extends DefaultObjectFormProcessor {
 
 		HashMap<String, Double> partQuantities = new HashMap<>();
 
-		// print childpart details
-		displayBOMPart(foundPrt, BOMData, spreadsheet, workbook, partQuantities);
+		// Collect the part structure data in "BOMData" 
+		collectPartData(part, BOMData, spreadsheet, workbook, partQuantities);
 		System.out.println("Count of BOMData:" + BOMData.size());
 		XSSFRow row1;
 		int rowid = 0;
@@ -124,6 +133,8 @@ public class BOMExcel extends DefaultObjectFormProcessor {
 			row1 = (XSSFRow) spreadsheet.createRow(rowid++);
 			Object[] objectArr = itr.next();
 			int cellid = 0; // Corrected cell index to start from 0
+			
+			//Iterating BOM data to print in excel.
 
 			for (Object obj1 : objectArr) {
 				XSSFCell cell1 = row1.createCell(cellid++);
@@ -148,8 +159,8 @@ public class BOMExcel extends DefaultObjectFormProcessor {
 		}
 
 		File excelFile = new File(
-				tmpLocation + File.separatorChar + FOLDER_CONSTANT + File.separatorChar + foundPrt.getName() + "_"
-						+ foundPrt.getVersionDisplayIdentifier() + "_" + foundPrt.getLifeCycleName() + ".xlsx");
+				tmpLocation + File.separatorChar + FOLDER_CONSTANT + File.separatorChar + part.getName() + "_"
+						+ part.getVersionDisplayIdentifier() + "_" + part.getLifeCycleName() + ".xlsx");
 		System.out.println("Excel Sheet: " + excelFile.getPath());
 		FileUtils.forceMkdirParent(excelFile);
 		FileUtils.touch(excelFile);
@@ -160,13 +171,13 @@ public class BOMExcel extends DefaultObjectFormProcessor {
 		return excelFile;
 	}
 
-	public static void displayBOMPart(WTPart part, LinkedHashSet<Object[]> BOMData, Sheet spreadsheet,
+	public static void collectPartData(WTPart part, LinkedHashSet<Object[]> BOMData, Sheet spreadsheet,
 			XSSFWorkbook workbook, HashMap<String, Double> partQuantities) throws WTException, IOException {
 
 		// Query for child parts
 		QueryResult qr = WTPartHelper.service.getUsesWTParts(part, new LatestConfigSpec());
 
-		if ((qr.size() > 0) && (null != qr)) {
+		if (qr != null && qr.size() > 0) { 
 			while (qr.hasMoreElements()) {
 				Persistable[] persistablePart = (Persistable[]) qr.nextElement();
 				WTPartUsageLink usageLink = (WTPartUsageLink) persistablePart[0];
@@ -263,11 +274,15 @@ public class BOMExcel extends DefaultObjectFormProcessor {
 				BOMData.add(rowData);
 
 				// Recursively process child parts
-				displayBOMPart(child, BOMData, spreadsheet, workbook, partQuantities);
+				collectPartData(child, BOMData, spreadsheet, workbook, partQuantities);
 			}
 		}
 	}
 
+	/*
+	 * Check if part is already present in the map
+	 */
+	
 	private static boolean rowContainsPartNumber(Object[] row, String partNumber) {
 		for (Object cell : row) {
 			if (cell != null && cell.equals(partNumber)) {
@@ -318,48 +333,47 @@ public class BOMExcel extends DefaultObjectFormProcessor {
 	}
 
 	private static void addHeader(LinkedHashSet<Object[]> BOMData, XSSFSheet spreadsheet, XSSFWorkbook workbook)
-			throws IOException {
-		// Create the header row
-		XSSFRow headerRow = spreadsheet.createRow(1);
-		int cellId = 0; // Starting from the first cell (index 0)
+	        throws IOException {
+	    // Create the header row only if BOMData is empty (no child parts)
+	    if (BOMData.isEmpty()) {
+	        XSSFRow headerRow = spreadsheet.createRow(0); // Create header at index 0 (first row)
+	        int cellId = 0; // Starting from the first cell (index 0)
 
-		// Read headers from properties file
-		LinkedHashMap<String, String> props = new LinkedHashMap<>();
-		try (BufferedReader reader1 = new BufferedReader(new FileReader(homeLocation + File.separatorChar + "codebase"
-				+ File.separatorChar + "BOMProperties" + File.separatorChar + "BOMReport.properties"))) {
-			String line;
-			while ((line = reader1.readLine()) != null) {
-				line = line.trim();
-				if (!line.isEmpty() && !line.startsWith("#")) { // Skip empty lines and comments
-					int index = line.indexOf('=');
-					if (index != -1) {
-						String key = line.substring(0, index).trim();
-						if (!key.equals("ifValueNotPresent") && !key.equals("ifattributeNotPresent")) {
-							String value = line.substring(index + 1).trim();
-							props.put(key, value);
-						}
-					}
-				}
-			}
-		}
+	        // Read headers from properties file
+	        LinkedHashMap<String, String> props = new LinkedHashMap<>();
+	        try (BufferedReader reader1 = new BufferedReader(new FileReader(
+	                homeLocation + File.separatorChar + "codebase" + File.separatorChar + "BOMProperties"
+	                        + File.separatorChar + "BOMReport.properties"))) {
+	            String line;
+	            while ((line = reader1.readLine()) != null) {
+	                line = line.trim();
+	                if (!line.isEmpty() && !line.startsWith("#")) { // Skip empty lines and comments
+	                    int index = line.indexOf('=');
+	                    if (index != -1) {
+	                        String key = line.substring(0, index).trim();
+	                        if (!key.equals("ifValueNotPresent") && !key.equals("ifattributeNotPresent")) {
+	                            String value = line.substring(index + 1).trim();
+	                            props.put(key, value);
+	                            XSSFCell headerCell = headerRow.createCell(cellId++);
+	                            headerCell.setCellValue(value);
 
-		// Printing the key-value pairs
-		for (Map.Entry<String, String> entry : props.entrySet()) {
-			System.out.println("Display name=" + entry.getValue());
-			XSSFCell headerCell = headerRow.createCell(cellId++);
-			headerCell.setCellValue(entry.getValue());
+	                            // Apply bold font to the header cell
+	                            XSSFFont boldFont = workbook.createFont();
+	                            boldFont.setBold(true);
+	                            XSSFCellStyle boldStyle = workbook.createCellStyle();
+	                            boldStyle.setFont(boldFont);
+	                            boldStyle.setAlignment(HorizontalAlignment.CENTER); // Center align the header text
+	                            headerCell.setCellStyle(boldStyle);
+	                        }
+	                    }
+	                }
+	            }
+	        }
 
-			// Apply bold font to the header cell
-			XSSFFont boldFont = workbook.createFont();
-			boldFont.setBold(true);
-			XSSFCellStyle boldStyle = workbook.createCellStyle();
-			boldStyle.setFont(boldFont);
-
-			headerCell.setCellStyle(boldStyle);
-		}
-
-		// Add additional headers from properties file after reading the entire file
-		BOMData.add(props.values().toArray());
+	        // Add headers to BOMData
+	        BOMData.add(props.values().toArray(new Object[0]));
+	    }
 	}
+
 
 }
